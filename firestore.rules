@@ -1,0 +1,16 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // La web només llegeix els esdeveniments: lectura pública, cap escriptura.
+    match /events/{eventId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Qualsevol altra col·lecció queda tancada.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "nits-musica",
+    "number": 1,
+    "category": "MÚSICA EN DIRECTE",
+    "title": "Nits que es queden amb tu",
+    "location": "Escenaris i música en directe",
+    "date": "12 de desembre de 2026",
+    "image": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1800&q=85",
+    "description": "La música transforma els espais i connecta persones. Descobreix una experiència plena d’energia, artistes i moments per recordar."
+  },
+  {
+    "id": "art-mirar",
+    "number": 2,
+    "category": "ART I CREATIVITAT",
+    "title": "Una altra manera de mirar",
+    "location": "Espais d’art i exposicions",
+    "date": "16 de gener de 2027",
+    "image": "https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=1800&q=85",
+    "description": "Explora noves perspectives a través de l’art, les idees i la creativitat. Una invitació a observar el món des d’un altre punt de vista."
+  },
+  {
+    "id": "experiencies",
+    "number": 3,
+    "category": "EXPERIÈNCIES",
+    "title": "Surt de la rutina",
+    "location": "Cultura i noves experiències",
+    "date": "6 de febrer de 2027",
+    "image": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1800&q=85",
+    "description": "Descobreix propostes diferents, espais per compartir i experiències que et conviden a sortir de la rutina i viure la cultura intensament."
+  }
+]

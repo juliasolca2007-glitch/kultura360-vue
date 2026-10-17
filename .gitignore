@@ -37,3 +37,13 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
+
+# Firebase
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+
+# Credencials
+.env
+.env.*
+*serviceAccount*.json

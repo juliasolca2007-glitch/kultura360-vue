@@ -2,12 +2,12 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAazbyo9hm-9a6B3KRiT8BWgPaTo_2PIS8",
-  authDomain: "vue-kultura360.firebaseapp.com",
-  projectId: "vue-kultura360",
-  storageBucket: "vue-kultura360.firebasestorage.app",
-  messagingSenderId: "608141759249",
-  appId: "1:608141759249:web:2afcf55e4cbff9106bb2b0"
+  apiKey: "AIzaSyC7yE0nuDFcMTF7tbMAiUAs5mT4uXXGDao",
+  authDomain: "kultura360-vue-julia.firebaseapp.com",
+  projectId: "kultura360-vue-julia",
+  storageBucket: "kultura360-vue-julia.firebasestorage.app",
+  messagingSenderId: "644591719110",
+  appId: "1:644591719110:web:9ae034af09cb76d95f7dc7"
 };
 
 const app = initializeApp(firebaseConfig);

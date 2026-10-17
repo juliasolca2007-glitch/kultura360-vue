@@ -1,50 +1,50 @@
 
 <script setup>
-import { computed } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '../firebase'
+import EstatDades from '../components/EstatDades.vue'
 
 const route = useRoute()
 
-const events = [
-  {
-    id: 'nits-musica',
-    category: 'MÚSICA EN DIRECTE',
-    title: 'Nits que es queden amb tu',
-    location: 'Escenaris i música en directe',
-    date: 'Properament',
-    image: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1800&q=85',
-    description: 'La música transforma els espais i connecta persones. Descobreix una experiència plena d’energia, artistes i moments per recordar.',
-    number: '01'
-  },
-  {
-    id: 'art-mirar',
-    category: 'ART I CREATIVITAT',
-    title: 'Una altra manera de mirar',
-    location: 'Espais d’art i exposicions',
-    date: 'Properament',
-    image: 'https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=1800&q=85',
-    description: 'Explora noves perspectives a través de l’art, les idees i la creativitat. Una invitació a observar el món des d’un altre punt de vista.',
-    number: '02'
-  },
-  {
-    id: 'experiencies',
-    category: 'EXPERIÈNCIES',
-    title: 'Surt de la rutina',
-    location: 'Cultura i noves experiències',
-    date: 'Properament',
-    image: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1800&q=85',
-    description: 'Descobreix propostes diferents, espais per compartir i experiències que et conviden a sortir de la rutina i viure la cultura intensament.',
-    number: '03'
-  }
-]
+// Document de la col·lecció "events" que correspon a l'id de la ruta
+const event = ref(null)
+const carregant = ref(true)
+const errorCarrega = ref('')
 
-const event = computed(() =>
-  events.find(item => item.id === route.params.id)
-)
+async function carregarEsdeveniment(id) {
+  carregant.value = true
+  errorCarrega.value = ''
+  event.value = null
+
+  try {
+    const snapshot = await getDoc(doc(db, 'events', String(id)))
+    if (snapshot.exists()) {
+      event.value = { id: snapshot.id, ...snapshot.data() }
+    }
+  } catch (error) {
+    console.error('Error llegint Firestore:', error)
+    errorCarrega.value = "No s'ha pogut carregar l'esdeveniment. Torna-ho a provar més tard."
+  } finally {
+    carregant.value = false
+  }
+}
+
+watch(() => route.params.id, id => carregarEsdeveniment(id), { immediate: true })
 </script>
 
 <template>
-  <main v-if="event" class="detail-page">
+  <main v-if="carregant || errorCarrega" class="detail-state section-wrap">
+    <EstatDades
+      v-if="carregant"
+      tipus="carregant"
+      missatge="Carregant l'esdeveniment..."
+    />
+    <EstatDades v-else tipus="error" :missatge="errorCarrega" />
+  </main>
+
+  <main v-else-if="event" class="detail-page">
     <section class="detail-hero">
       <img :src="event.image" :alt="event.title" />
       <div class="detail-hero-overlay"></div>
@@ -106,3 +106,114 @@ const event = computed(() =>
     </RouterLink>
   </main>
 </template>
+
+<style scoped>
+.detail-state {
+  padding-top: 120px;
+  padding-bottom: 120px;
+}
+
+.detail-hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 520px;
+  overflow: hidden;
+  padding: 80px 8%;
+  color: white;
+}
+
+.detail-hero img,
+.detail-hero-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.detail-hero img {
+  object-fit: cover;
+}
+
+.detail-hero-overlay {
+  background: linear-gradient(0deg, rgba(25, 24, 21, 0.85), rgba(25, 24, 21, 0.2));
+}
+
+.detail-hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.detail-hero-content h1 {
+  margin: 12px 0;
+  font-size: clamp(42px, 6vw, 80px);
+  letter-spacing: -0.07em;
+  line-height: 1;
+}
+
+.detail-back {
+  display: inline-block;
+  margin-bottom: 30px;
+  color: white;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.detail-body {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 60px;
+  padding-top: 90px;
+  padding-bottom: 90px;
+}
+
+.detail-main h2 {
+  margin: 15px 0 25px;
+  font-size: clamp(30px, 3.5vw, 46px);
+  letter-spacing: -0.06em;
+}
+
+.detail-description {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.detail-info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+
+.detail-info .button {
+  margin-top: 30px;
+}
+
+.detail-end {
+  padding: 90px 8%;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.detail-end h2 {
+  margin: 15px 0 30px;
+  font-size: clamp(40px, 6vw, 72px);
+  letter-spacing: -0.07em;
+  line-height: 1;
+}
+
+.not-found {
+  padding-top: 120px;
+  padding-bottom: 120px;
+}
+
+@media (max-width: 800px) {
+  .detail-body {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+</style>
